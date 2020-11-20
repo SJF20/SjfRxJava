@@ -3,7 +3,6 @@ package com.shijingfeng.rxjavamini
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log.e
-import com.shijingfeng.rxjavamini.SjfObservable.Companion.create
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,18 +12,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        create(object : SjfObservableOnSubscribe<String> {
+        SjfObservable.create(object : SjfObservableOnSubscribe<Int> {
             /**
              * 订阅被观察者
              *
              * @param observer 被观察者
              */
-            override fun subscribe(observer: SjfObserver<String>) {
+            override fun subscribe(observer: SjfObserver<Int>) {
                 e("测试", "1")
-                observer.onNext("你好")
+                observer.onNext(1)
             }
-        }).subscribe(object : SjfObserver<String> {
-
+        }).map {
+            "数字: $it"
+        }.subscribe(object : SjfObserver<String> {
             /**
              * 订阅回调
              */
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
              * 数据响应回调
              */
             override fun onNext(data: String) {
-                e("测试", data)
+                e("测试", "onNext: $data")
             }
 
             /**
